@@ -63,7 +63,7 @@ void prestarLibroTBiblioteca(TBiblioteca biblioteca, int ciSocio, int isbnLibro,
 
 // Indica si un libro está disponible para ser prestado. Un libro se considera disponible
 // si lo tiene la biblioteca y no se encuentra prestado.
-// Debe ejecutar en O(max(l, p)), siendo:
+// Debe ejecutar en O(l + p^2)), siendo:
 //  - l la cantidad de libros en la biblioteca.
 //  - p la cantidad de prestamos en la biblioteca.
 bool disponibleLibroTBiblioteca(TBiblioteca biblioteca, int isbnLibro);
