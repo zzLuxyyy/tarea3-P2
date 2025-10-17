@@ -41,11 +41,23 @@ void insertarTConjuntoGeneros(TConjuntoGeneros &c, int id)
 
 void borrarDeTConjuntoGeneros(TConjuntoGeneros &c, int id)
 {
+  if(id >= 0 && id < c->capacidad)
+  {
+    if(c->ids[id] == 1)
+    {
+      c->ids[id] = 0;
+      c->cardinal--;
+    }
+  }
 }
 
 bool perteneceTConjuntoGeneros(TConjuntoGeneros c, int id)
 {
-  return true;
+  if (id >= 0 && id < c->capacidad)
+  {
+    return c->ids[id] == 1;
+  }
+  return false;
 }
 
 int cardinalTConjuntoGeneros(TConjuntoGeneros c)
@@ -86,15 +98,48 @@ void liberarTConjuntoGeneros(TConjuntoGeneros &c)
 
 TConjuntoGeneros unionTConjuntoGeneros(TConjuntoGeneros c1, TConjuntoGeneros c2)
 {
-  return NULL;
+  int cantMax = c1->capacidad;
+  TConjuntoGeneros res = crearTConjuntoGeneros(c1->capacidad);
+
+  for (int i = 0; i < cantMax; i++)
+  {
+    if (c1->ids[i] == 1 || c2->ids[i] == 1)
+    {
+      res->ids[i] = 1;
+      res->cardinal++;
+    }
+  }
+  return res;
 }
 
 TConjuntoGeneros interseccionTConjuntoGeneros(TConjuntoGeneros c1, TConjuntoGeneros c2)
 {
-  return NULL;
+  int cantMax = c1->capacidad;
+  TConjuntoGeneros res = crearTConjuntoGeneros(c1->capacidad);
+
+  for (int i = 0; i < cantMax; i++)
+  {
+    if(c1->ids[i] == 1 && c2->ids[i] == 1)
+    {
+      res->ids[i] = 1;
+      res->cardinal++;
+    }
+  }
+  return res;
 }
 
 TConjuntoGeneros diferenciaTConjuntoGeneros(TConjuntoGeneros c1, TConjuntoGeneros c2)
 {
-  return NULL;
+  int cantMax = c1->capacidad;
+  TConjuntoGeneros res = crearTConjuntoGeneros(c1->capacidad);
+  
+  for (int i = 0; i < cantMax; i++)
+  {
+    if(c1->ids[i] == 1 && c2->ids[i] == 0)
+    {
+      res->ids[i] = 1;
+      res->cardinal++;
+    }
+  }
+  return res;
 }
