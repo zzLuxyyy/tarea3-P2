@@ -1,11 +1,17 @@
 #include "../include/colaReservas.h"
 
+struct rep_nodo_reserva
+{
+  TReserva reserva;
+  rep_nodo_reserva *siguiente;
+};
+typedef rep_nodo_reserva *TNodoReserva;
+
 struct rep_colaReservas
 {
-  // Completar
-  rep_colaReservas *sig;
-  rep_colaReservas *primero;
-  rep_colaReservas *ultimo;
+  nat cardinal;
+  TNodoReserva primero;
+  TNodoReserva ultimo;
 };
 
 TColaReservas crearTColaReservas()
@@ -13,30 +19,35 @@ TColaReservas crearTColaReservas()
   TColaReservas q = new rep_colaReservas;
   q->primero = NULL;
   q->ultimo = NULL;
+  q->cardinal = 0;
   return q;
 }
 
 void encolarTColaReservas(TColaReservas &colaReservas, TReserva reserva)
 {
-  rep_colaReservas *nuevo = new rep_colaReservas;
-  nuevo->sig = NULL;
+  TNodoReserva nuevo = new rep_nodo_reserva;
+  nuevo->reserva = reserva;
+  nuevo->siguiente = NULL;
 
   if (colaReservas->primero == NULL)
   {
     colaReservas->primero = nuevo;
+    colaReservas->ultimo = nuevo;
   }
   else
-    colaReservas->ultimo->sig = nuevo;
-
-  colaReservas->ultimo = nuevo;
+  {
+    colaReservas->ultimo->siguiente = nuevo;
+    colaReservas->ultimo = nuevo;
+  }
+  colaReservas->cardinal++;
 }
 
 void desencolarTColaReservas(TColaReservas &colaReservas)
 {
   while (colaReservas->primero != NULL)
   {
-    colaReservas->primero = colaReservas->primero->sig;
-    //colaReservas->primero;
+    colaReservas->primero = colaReservas->primero->siguiente;
+    // colaReservas->primero;
   }
 }
 
@@ -47,7 +58,7 @@ TReserva frenteTColaReservas(TColaReservas colaReservas)
 
 nat cantidadTColaReservas(TColaReservas colaReservas)
 {
-  return 0;
+  return colaReservas->cardinal;
 }
 
 void imprimirTColaReservas(TColaReservas colaReservas)
@@ -56,6 +67,22 @@ void imprimirTColaReservas(TColaReservas colaReservas)
 
 void liberarTColaReservas(TColaReservas &colaReservas)
 {
+  TNodoReserva actual = colaReservas->primero;
+  TNodoReserva aBorrar;
+  while (actual != NULL)
+  {
+    aBorrar = actual;
+    actual = actual->siguiente;
+    liberarTReserva(aBorrar->reserva);
+    delete aBorrar;
+  }
+  delete colaReservas;
+  colaReservas = NULL;
+}
+
+void liberarTColaReservasSoloEstructura(TColaReservas &colaReservas)
+{
+  
 }
 
 TReserva extraerFrenteTColaReservas(TColaReservas &colaReservas)

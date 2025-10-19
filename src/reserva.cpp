@@ -56,6 +56,4 @@ TReserva copiarTReserva(TReserva reserva)
 
 void liberarTReservaSoloEstructura(TReserva &reserva)
 {
-  delete reserva;
-  reserva = NULL;
 }
