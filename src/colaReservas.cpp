@@ -27,33 +27,40 @@ void encolarTColaReservas(TColaReservas &colaReservas, TReserva reserva)
 {
   TNodoReserva nuevo = new rep_nodo_reserva;
   nuevo->reserva = reserva;
-  nuevo->siguiente = NULL;
+  nuevo->siguiente = NULL; // El nodo nuevo es el ultimo.
 
-  if (colaReservas->primero == NULL)
+  if (colaReservas->primero == NULL) // Cola vacía en la que primero
+                                     // y utlimo apuntan a nuevo.
   {
     colaReservas->primero = nuevo;
     colaReservas->ultimo = nuevo;
   }
   else
-  {
+  { // Como la cola es no nula,
     colaReservas->ultimo->siguiente = nuevo;
-    colaReservas->ultimo = nuevo;
+    colaReservas->ultimo = nuevo; // nuevo ahora es el ultimo.
   }
   colaReservas->cardinal++;
 }
 
 void desencolarTColaReservas(TColaReservas &colaReservas)
 {
-  while (colaReservas->primero != NULL)
+  TNodoReserva aBorrar = colaReservas->primero;
+  liberarTReserva(aBorrar->reserva);                        // Reserva del nodo liberada.
+  colaReservas->primero = colaReservas->primero->siguiente; // Mueve el puntero al siguiente
+
+  // Si la cola queda vacia, ultimo debe ser NULL.
+  if (colaReservas->primero == NULL)
   {
-    colaReservas->primero = colaReservas->primero->siguiente;
-    // colaReservas->primero;
+    colaReservas->ultimo = NULL;
   }
+  delete aBorrar; // Libera el nodo.
+  colaReservas->cardinal--;
 }
 
 TReserva frenteTColaReservas(TColaReservas colaReservas)
 {
-  return NULL;
+  return colaReservas->primero->reserva;
 }
 
 nat cantidadTColaReservas(TColaReservas colaReservas)
@@ -63,6 +70,14 @@ nat cantidadTColaReservas(TColaReservas colaReservas)
 
 void imprimirTColaReservas(TColaReservas colaReservas)
 {
+  printf("Cola de Reservas:\n");
+  TNodoReserva actual = colaReservas->primero;
+
+  while (actual != NULL)
+  { // imprimirTReservas imprime la reserva.
+    imprimirTReserva(actual->reserva);
+    actual = actual->siguiente;
+  }
 }
 
 void liberarTColaReservas(TColaReservas &colaReservas)
@@ -82,10 +97,37 @@ void liberarTColaReservas(TColaReservas &colaReservas)
 
 void liberarTColaReservasSoloEstructura(TColaReservas &colaReservas)
 {
-  
+  TNodoReserva actual = colaReservas->primero;
+  TNodoReserva aBorrar;
+
+  while (actual != NULL)
+  {
+    aBorrar = actual;
+    actual = actual->siguiente; 
+    // Llama a liberarTReserva que libera reserva
+    liberarTReserva(aBorrar->reserva);
+    delete aBorrar;
+  }
+
+  delete colaReservas;
+  colaReservas = NULL;
 }
 
 TReserva extraerFrenteTColaReservas(TColaReservas &colaReservas)
 {
-  return NULL;
+  TNodoReserva aBorrar = colaReservas->primero;
+  TReserva res = aBorrar->reserva;
+
+  // Mueve el puntero primero al siguiente nodo.
+  colaReservas->primero = colaReservas->primero->siguiente;
+
+  if (colaReservas->primero == NULL) // Si la cola quedó vacía,
+  {                                  // ultimo debe ser NULL.
+    colaReservas->ultimo = NULL;
+  }
+
+  delete aBorrar;
+  colaReservas->cardinal--; // Actualiza el cardinal.
+
+  return res;
 }

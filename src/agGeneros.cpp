@@ -41,7 +41,7 @@ void liberarTAGGeneros(TAGGeneros &arbolGeneros)
 
 bool existeGeneroTAGGeneros(TAGGeneros arbolGeneros, int idGenero)
 {
-  return false;
+  return arbolGeneros == NULL;
 }
 
 char *nombreGeneroTAGGeneros(TAGGeneros arbolGeneros, int idGenero)
