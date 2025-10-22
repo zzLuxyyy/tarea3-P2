@@ -108,7 +108,10 @@ IDS_PUBLICOS = reserva1-crear-eliminar \
 	biblioteca3-devolucion \
 	biblioteca4-obtener-libros-genero \
 
-IDS_PRIVADOS = 
+IDS_PRIVADOS = agGeneros8-privado \
+	colaReserva5-privado \
+	biblioteca5-privado \
+	conjuntoGeneros7-privado \
 
 CASOS = $(IDS_PUBLICOS) $(IDS_PRIVADOS)
 
