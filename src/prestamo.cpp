@@ -95,7 +95,7 @@ TPrestamo copiarTPrestamo(TPrestamo prestamo)
   copia->socio = copiarTSocio(prestamo->socio);
   copia->libro = copiarTLibro(prestamo->libro);
   copia->fechaRetiro = copiarTFecha(prestamo->fechaRetiro);
-  
+
   if (fueRetornadoTPrestamo(prestamo))
   {
     copia->fechaDevolucion = copiarTFecha(prestamo->fechaDevolucion);
@@ -109,13 +109,26 @@ TPrestamo copiarTPrestamo(TPrestamo prestamo)
 
 void liberarTPrestamoSoloEstructura(TPrestamo &prestamo)
 {
-  if( prestamo != NULL)
+  if (prestamo == NULL)
   {
+    return;
+  }
+
+  if (prestamo->fechaRetiro != NULL)
+  {
+    liberarTFecha(prestamo->fechaRetiro);
+    prestamo->fechaRetiro = NULL;
+  }
+
+  if (prestamo->fechaDevolucion != NULL)
+  {
+    liberarTFecha(prestamo->fechaDevolucion);
+    prestamo->fechaDevolucion = NULL;
+  }
+
   prestamo->socio = NULL;
   prestamo->libro = NULL;
-  prestamo->fechaDevolucion = NULL;
-  prestamo->fechaRetiro = NULL;
+
   delete prestamo;
   prestamo = NULL;
-  }
 }

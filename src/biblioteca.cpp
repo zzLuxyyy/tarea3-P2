@@ -38,6 +38,7 @@ void prestarLibroTBiblioteca(TBiblioteca biblioteca, int ciSocio, int isbnLibro,
   {
     return;
   }
+
   TSocio s1 = obtenerSocioTLSESocios(biblioteca->socio, ciSocio);
   TLibro l1 = obtenerLibroTABBLibros(biblioteca->libros, isbnLibro);
   TPrestamo p1 = crearTPrestamo(s1, l1, fechaPrestamo);
@@ -60,9 +61,8 @@ bool disponibleLibroTBiblioteca(TBiblioteca biblioteca, int isbnLibro)
   for (nat i = 1; i <= cantidadPrestamos; i++)
   {
     TPrestamo presta = obtenerNesimoTLDEPrestamos(biblioteca->prestamos, i);
-    
+
     TLibro libro = libroTPrestamo(presta);
-    
 
     if (isbnTLibro(libro) == isbnLibro && !fueRetornadoTPrestamo(presta))
     {
@@ -73,124 +73,124 @@ bool disponibleLibroTBiblioteca(TBiblioteca biblioteca, int isbnLibro)
   return true;
 }
 
-  void reservarLibroTBiblioteca(TBiblioteca biblioteca, int ciSocio, int isbnLibro)
+void reservarLibroTBiblioteca(TBiblioteca biblioteca, int ciSocio, int isbnLibro)
+{
+  TSocio socio = obtenerSocioTLSESocios(biblioteca->socio, ciSocio);
+
+  if (socio == NULL)
   {
-    TSocio socio = obtenerSocioTLSESocios(biblioteca->socio, ciSocio); // obtengo el socio a partir de su id
-
-    if (socio == NULL)
-    {
-      return; // no hago nada si no existe el socio
-    }
-    TLibro libro = obtenerLibroTABBLibros(biblioteca->libros, isbnLibro); 
-
-    if (libro == NULL)
-    {
-      return; 
-    }
-
-    if (!disponibleLibroTBiblioteca(biblioteca, isbnLibro))
-    {
-      TReserva reserva = crearTReserva(socio, libro); 
-
-      encolarTColaReservas(biblioteca->reservas, reserva); 
-    }
+    return;
   }
 
-  void devolverLibroTBiblioteca(TBiblioteca biblioteca, int ciSocio, int isbnLibro, TFecha fechaPrestamo, TFecha fechaDevolucion)
+  TLibro libro = obtenerLibroTABBLibros(biblioteca->libros, isbnLibro);
+
+  if (libro == NULL)
   {
-    nat cantidadPrestamos = cantidadTLDEPrestamos(biblioteca->prestamos);
+    return;
+  }
 
-    for (nat i = 1; i <= cantidadPrestamos; i++)
+  if (!disponibleLibroTBiblioteca(biblioteca, isbnLibro))
+  {
+    TReserva reserva = crearTReserva(socio, libro);
+    encolarTColaReservas(biblioteca->reservas, reserva);
+  }
+}
+
+void devolverLibroTBiblioteca(TBiblioteca biblioteca, int ciSocio, int isbnLibro, TFecha fechaPrestamo, TFecha fechaDevolucion)
+{
+  nat cantidadPrestamos = cantidadTLDEPrestamos(biblioteca->prestamos);
+
+  for (nat i = 1; i <= cantidadPrestamos; i++)
+  {
+    TPrestamo presta = obtenerNesimoTLDEPrestamos(biblioteca->prestamos, i);
+
+    if (ciTSocio(socioTPrestamo(presta)) == ciSocio &&
+        isbnTLibro(libroTPrestamo(presta)) == isbnLibro &&
+        compararTFechas(fechaRetiroTPrestamo(presta), fechaPrestamo) == 0)
     {
-      TPrestamo presta = obtenerNesimoTLDEPrestamos(biblioteca->prestamos, i);
+      actualizarFechaDevolucionTPrestamo(presta, fechaDevolucion);
+    }
+  }
+}
 
-      if (ciTSocio(socioTPrestamo(presta)) == ciSocio &&
-          isbnTLibro(libroTPrestamo(presta)) == isbnLibro &&
-          compararTFechas(fechaRetiroTPrestamo(presta), fechaPrestamo) == 0)
+void imprimirSociosTBiblioteca(TBiblioteca biblioteca)
+{
+  if (biblioteca == NULL)
+  {
+    return;
+  }
+  imprimirTLSESocios(biblioteca->socio);
+}
+
+void imprimirLibrosTBiblioteca(TBiblioteca biblioteca)
+{
+  if (biblioteca == NULL)
+  {
+    return;
+  }
+  imprimirTABBLibros(biblioteca->libros);
+}
+
+void imprimirReservasTBiblioteca(TBiblioteca biblioteca)
+{
+  if (biblioteca == NULL)
+  {
+    return;
+  }
+  imprimirTColaReservas(biblioteca->reservas);
+}
+
+void imprimirPrestamosTBiblioteca(TBiblioteca biblioteca)
+{
+  if (biblioteca == NULL)
+  {
+    return;
+  }
+  imprimirTLDEPrestamos(biblioteca->prestamos);
+}
+
+void agregarGeneroABiblioteca(TBiblioteca biblioteca, int idGeneroPadre, int idGenero, const char nombreGenero[MAX_NOMBRE])
+{
+  insertarGeneroTAGGeneros(biblioteca->generos, idGeneroPadre, idGenero, nombreGenero);
+}
+
+TABBLibros obtenerLibrosDeGenero(TBiblioteca biblioteca, int idGenero)
+{
+
+  TAGGeneros subArbolGeneros = obtenerSubarbolTAGGeneros(biblioteca->generos, idGenero);
+
+  if (subArbolGeneros == NULL)
+  {
+    return crearTABBLibrosVacio();
+  }
+  TABBLibros nuevo = crearTABBLibrosVacio();
+
+  int cantidad = cantidadTABBLibros(biblioteca->libros);
+
+  for (int i = 1; i <= cantidad; i++)
+  {
+    TLibro libro = obtenerNesimoLibroTABBLibros(biblioteca->libros, i);
+    if (libro != NULL)
+    {
+      int idGeneroLibro = idGeneroTLibro(libro);
+
+      if (existeGeneroTAGGeneros(subArbolGeneros, idGeneroLibro))
       {
-        actualizarFechaDevolucionTPrestamo(presta, fechaDevolucion);
+        TLibro copia = copiarTLibro(libro);
+        insertarLibroTABBLibros(nuevo, copia);
       }
     }
   }
+  return nuevo;
+}
 
-  void imprimirSociosTBiblioteca(TBiblioteca biblioteca)
-  {
-    if (biblioteca == NULL)
-    {
-      return;
-    }
-    imprimirTLSESocios(biblioteca->socio);
-  }
-
-  void imprimirLibrosTBiblioteca(TBiblioteca biblioteca)
-  {
-    if (biblioteca == NULL)
-    {
-      return;
-    }
-    imprimirTABBLibros(biblioteca->libros);
-  }
-
-  void imprimirReservasTBiblioteca(TBiblioteca biblioteca)
-  {
-    if (biblioteca == NULL)
-    {
-      return;
-    }
-    imprimirTColaReservas(biblioteca->reservas);
-  }
-
-  void imprimirPrestamosTBiblioteca(TBiblioteca biblioteca)
-  {
-    if (biblioteca == NULL)
-    {
-      return;
-    }
-    imprimirTLDEPrestamos(biblioteca->prestamos);
-  }
-
-  void agregarGeneroABiblioteca(TBiblioteca biblioteca, int idGeneroPadre, int idGenero, const char nombreGenero[MAX_NOMBRE])
-  {
-    insertarGeneroTAGGeneros(biblioteca->generos, idGeneroPadre, idGenero, nombreGenero);
-  }
-
-  TABBLibros obtenerLibrosDeGenero(TBiblioteca biblioteca, int idGenero)
-  {
-
-    TAGGeneros subArbolGeneros = obtenerSubarbolTAGGeneros(biblioteca->generos, idGenero);
-
-    if (subArbolGeneros == NULL)
-    {
-      return crearTABBLibrosVacio();
-    }
-    TABBLibros nuevo = crearTABBLibrosVacio();
-
-    int cantidad = cantidadTABBLibros(biblioteca->libros);
-
-    for (int i = 1; i <= cantidad; i++)
-    {
-      TLibro libro = obtenerNesimoLibroTABBLibros(biblioteca->libros, i);
-      if (libro != NULL)
-      {
-        int idGeneroLibro = idGeneroTLibro(libro);
-
-        if (existeGeneroTAGGeneros(subArbolGeneros, idGeneroLibro))
-        {
-          TLibro copia = copiarTLibro(libro);
-          insertarLibroTABBLibros(nuevo, copia);
-        }
-      }
-    }
-    return nuevo;
-  }
-
-  void liberarTBiblioteca(TBiblioteca & biblioteca)
-  {
-    liberarTLDEPrestamosSoloEstructura(biblioteca->prestamos);
-    liberarTColaReservasSoloEstructura(biblioteca->reservas);
-    liberarTAGGeneros(biblioteca->generos);
-    liberarTABBLibros(biblioteca->libros);
-    liberarTLSESocios(biblioteca->socio);
-    delete biblioteca;
-    biblioteca = NULL;
-  }
+void liberarTBiblioteca(TBiblioteca &biblioteca)
+{
+  liberarTLDEPrestamosSoloEstructura(biblioteca->prestamos);
+  liberarTColaReservasSoloEstructura(biblioteca->reservas);
+  liberarTAGGeneros(biblioteca->generos);
+  liberarTABBLibros(biblioteca->libros);
+  liberarTLSESocios(biblioteca->socio);
+  delete biblioteca;
+  biblioteca = NULL;
+}

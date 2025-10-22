@@ -56,6 +56,12 @@ TReserva copiarTReserva(TReserva reserva)
 
 void liberarTReservaSoloEstructura(TReserva &reserva)
 {
-  delete reserva;
-  reserva = NULL;
+  if (reserva != NULL)
+  {
+    reserva->socio = NULL;
+    reserva->libro = NULL;
+
+    delete reserva;
+    reserva = NULL;
+  }
 }
