@@ -1,0 +1,32 @@
+crearBiblioteca
+crearSocio 12345678 Jim Dear 10 03 2004
+agregarGeneroABiblioteca -1 1 Default
+crearFecha 01/01/1966
+crearLibro 431244557 "Lo bello y lo triste" "Yasunari" "Kawabata" "Un escritor se reencuentra con una amante del pasado en una historia de dolor y deseo" 1
+agregarLibroBiblioteca
+reservarLibroBiblioteca 12345678 431244557
+imprimirReservasBiblioteca
+agregarSocioBiblioteca
+crearSocio 12345679 Raul Rodriguez 10 03 2001
+reservarLibroBiblioteca 12345678 431244557
+imprimirReservasBiblioteca
+crearFecha 01/03/1970
+prestarLibroBiblioteca 12345678 431244557
+reservarLibroBiblioteca 12345677 431244557
+imprimirReservasBiblioteca
+reservarLibroBiblioteca 12345678 431244587
+imprimirReservasBiblioteca
+reservarLibroBiblioteca 12345678 431244557
+reservarLibroBiblioteca 12345679 431244557
+agregarSocioBiblioteca
+imprimirReservasBiblioteca
+reservarLibroBiblioteca 12345679 431244557
+imprimirReservasBiblioteca
+crearFecha 15/08/2025
+devolverLibroBiblioteca 12345678 431244557 01/03/1970
+crearSocio 12345677 Paola Berruti 10 02 2004
+agregarSocioBiblioteca
+reservarLibroBiblioteca 12345677 431244557
+imprimirReservasBiblioteca
+liberarBiblioteca
+Fin
