@@ -84,10 +84,13 @@ bool existeSocioTLSESocios(TLSESocios lseSocios, int ci) {
 
 TSocio obtenerSocioTLSESocios(TLSESocios lseSocios, int ci) {
     nodo* actual = lseSocios->primero;
-    while (ciTSocio(actual->socio) != ci) {
+    while (actual != NULL && ciTSocio(actual->socio) != ci) {
         actual = actual->sig;
     }
-    return actual->socio;
+    if (actual != NULL) {
+        return actual->socio;
+    }
+    return NULL;  
 }
 
 TSocio obtenerNesimoTLSESocios(TLSESocios lseSocios, int n) {

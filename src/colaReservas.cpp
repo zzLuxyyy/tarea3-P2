@@ -104,8 +104,7 @@ void liberarTColaReservasSoloEstructura(TColaReservas &colaReservas)
   {
     aBorrar = actual;
     actual = actual->siguiente; 
-    // Llama a liberarTReserva que libera reserva
-    liberarTReserva(aBorrar->reserva);
+    liberarTReservaSoloEstructura(aBorrar->reserva);
     delete aBorrar;
   }
 

@@ -75,24 +75,26 @@ bool disponibleLibroTBiblioteca(TBiblioteca biblioteca, int isbnLibro)
 
 void reservarLibroTBiblioteca(TBiblioteca biblioteca, int ciSocio, int isbnLibro)
 {
+  // Verificar que el socio existe
+  if (!existeSocioTLSESocios(biblioteca->socio, ciSocio))
+  {
+    return;  // Socio no existe, no hacer nada
+  }
+  
   TSocio socio = obtenerSocioTLSESocios(biblioteca->socio, ciSocio);
-
-  if (socio == NULL)
+  
+  // Verificar que el libro existe
+  if (!existeLibroTABBLibros(biblioteca->libros, isbnLibro))
   {
-    return;
+    return;  // Libro no existe, no hacer nada
   }
-
+  
   TLibro libro = obtenerLibroTABBLibros(biblioteca->libros, isbnLibro);
-
-  if (libro == NULL)
-  {
-    return;
-  }
 
   if (!disponibleLibroTBiblioteca(biblioteca, isbnLibro))
   {
-    TReserva reserva = crearTReserva(socio, libro);
-    encolarTColaReservas(biblioteca->reservas, reserva);
+    TReserva reserva = crearTReserva(socio, libro); 
+    encolarTColaReservas(biblioteca->reservas, reserva); 
   }
 }
 
