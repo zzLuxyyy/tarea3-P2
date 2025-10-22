@@ -159,3 +159,22 @@ TLDEPrestamos filtrarPrestamosTLDEPrestamos(TLDEPrestamos &ldePrestamos, int cri
     }
     return filtrada;
 }
+
+void liberarTLDEPrestamosSoloEstructura(TLDEPrestamos &ldePrestamos)
+{
+    if (ldePrestamos == NULL) return;
+
+    struct nodoDoble *actual = ldePrestamos->primero;
+    while (actual != NULL)
+    {
+        struct nodoDoble *aux = actual;
+        actual = actual->sig;
+        if (aux->prestamo != NULL)
+        {
+            liberarTPrestamoSoloEstructura(aux->prestamo);
+        }
+        delete aux;
+    }
+    delete ldePrestamos;
+    ldePrestamos = NULL;
+}

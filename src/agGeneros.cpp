@@ -15,8 +15,8 @@ TAGGeneros crearTAGGeneros()
   nuevo->idGenero = 0;
   nuevo->pH = NULL;
   nuevo->sH = NULL;
-  nuevo->nombreGenero[MAX_NOMBRE - 1] = '\0';
 
+  nuevo->nombreGenero[0] = '\0';
   return nuevo;
 }
 
@@ -26,6 +26,10 @@ void insertarGeneroTAGGeneros(TAGGeneros &arbolGeneros, int idGeneroPadre, int i
 
 void imprimirTAGGeneros(TAGGeneros arbolGeneros)
 {
+  if (arbolGeneros == NULL || arbolGeneros->idGenero == 0)
+  {
+    return;
+  }
 }
 
 void liberarTAGGeneros(TAGGeneros &arbolGeneros)
@@ -41,12 +45,41 @@ void liberarTAGGeneros(TAGGeneros &arbolGeneros)
 
 bool existeGeneroTAGGeneros(TAGGeneros arbolGeneros, int idGenero)
 {
-  return arbolGeneros == NULL;
+  if (arbolGeneros == NULL)
+  {
+    return false;
+  }
+
+  if (idGenero == arbolGeneros->idGenero)
+  {
+    return true;
+  }
+
+  if (existeGeneroTAGGeneros(arbolGeneros->pH, idGenero))
+  {
+    return true;
+  }
+  return existeGeneroTAGGeneros(arbolGeneros->sH, idGenero);
 }
 
 char *nombreGeneroTAGGeneros(TAGGeneros arbolGeneros, int idGenero)
 {
-  return NULL;
+  if (arbolGeneros == NULL)
+  {
+    return NULL;
+  }
+
+  if (idGenero == arbolGeneros->idGenero)
+  {
+    return arbolGeneros->nombreGenero;
+  }
+
+  char *res = nombreGeneroTAGGeneros(arbolGeneros->pH, idGenero);
+  if (res != NULL)
+  {
+    return res;
+  }
+  return nombreGeneroTAGGeneros(arbolGeneros->sH, idGenero);
 }
 
 nat alturaTAGGeneros(TAGGeneros arbolGeneros)

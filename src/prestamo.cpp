@@ -106,3 +106,16 @@ TPrestamo copiarTPrestamo(TPrestamo prestamo)
   }
   return copia;
 }
+
+void liberarTPrestamoSoloEstructura(TPrestamo &prestamo)
+{
+  if( prestamo != NULL)
+  {
+  prestamo->socio = NULL;
+  prestamo->libro = NULL;
+  prestamo->fechaDevolucion = NULL;
+  prestamo->fechaRetiro = NULL;
+  delete prestamo;
+  prestamo = NULL;
+  }
+}
