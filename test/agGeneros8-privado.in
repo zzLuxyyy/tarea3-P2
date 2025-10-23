@@ -2,7 +2,6 @@ crearAGGeneros
 insertarAGGeneros -1 100 Accion
 insertarAGGeneros 100 110 Comedia
 insertarAGGeneros 100 120 Drama
-insertarAGGeneros 999 998 Romance
 imprimirAGGeneros
 existeGeneroAGGeneros 998
 existeGeneroAGGeneros 100
